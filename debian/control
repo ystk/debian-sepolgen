@@ -1,0 +1,29 @@
+Source: sepolgen
+VCS-Git: git://git.debian.org/~srivasta/debian/sepolgen.git
+VCS-Browser: http://git.debian.org/git/?p=users/srivasta/debian/sepolgen.git
+Priority: optional
+Section: python
+Maintainer: Russell Coker <russell@coker.com.au>
+Uploaders: Manoj Srivastava <srivasta@debian.org>
+Standards-Version: 3.8.4.0
+Build-Depends-Indep: python-all-dev (>= 2.3.5-11)
+XS-Python-Version: all
+
+Package: python-sepolgen
+Architecture: all
+Depends: python, python-support (>= 0.7.1)
+Provides: sepolgen
+Replaces: sepolgen
+Conflicts: sepolgen
+Description: A Python module used in SELinux policy generation
+ This package contains a Python module that forms the core of the modern
+ audit2allow (which is a part of the package policycoreutils). The
+ sepolgen library is structured to give flexibility to the application
+ using it. The library contains: Reference Policy Representation,
+ which are Objects for representing policies and the reference policy
+ interfaces. Secondly, it has objects and algorithms for representing
+ access and sets of access in an abstract way and searching that
+ access. It also has a parser for reference policy "headers". It
+ contains infrastructure for parsing SELinux related messages as
+ produced by the audit system. It has facilities for generating policy
+ based on required access.
