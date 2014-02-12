@@ -1,3 +1,41 @@
+sepolgen (1.1.5-3) unstable; urgency=low
+
+  * Team upload.
+  * Bump python-setools dependency to >= 3.3.7-2
+
+ -- Laurent Bigonville <bigon@debian.org>  Tue, 20 Mar 2012 19:39:48 +0100
+
+sepolgen (1.1.5-2) unstable; urgency=low
+
+  * Team upload.
+  * Move to dh sequence and dh_python2
+  * debian/control:
+    - Bump Standards-Version to 3.9.3 (no further change)
+    - Restructure long description and remove leading article of short
+      description to please lintian
+    - Drop C/P/R for sepolgen binary package, it's gone for a long time
+    - Add python-selinux and python-setools as build-dependency
+    - Add python-selinux and python-setools as dependency (Closes: #662600)
+    - Update Vcs-* fields
+    - Put the package under Debian SELinux team maintenance
+  * Switch to dpkg-source 3.0 (quilt) format
+  * Add debian/gbp.conf file
+
+ -- Laurent Bigonville <bigon@debian.org>  Wed, 14 Mar 2012 23:07:45 +0100
+
+sepolgen (1.1.5-1) unstable; urgency=low
+
+  * New upstream version, adds support for filename trans and some small
+    fixes.
+
+ -- Russell Coker <russell@coker.com.au>  Tue, 28 Feb 2012 16:48:11 +1100
+
+sepolgen (1.1.0-1) unstable; urgency=low
+
+  * New upstream release for version bump
+
+ -- Russell Coker <russell@coker.com.au>  Tue, 30 Aug 2011 15:28:37 +1000
+
 sepolgen (1.0.23-1) unstable; urgency=low
 
   * New upstream release

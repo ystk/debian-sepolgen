@@ -109,6 +109,7 @@ tokens = (
     'DONTAUDIT',
     'AUDITALLOW',
     'NEVERALLOW',
+    'PERMISSIVE',
     'TYPE_TRANSITION',
     'TYPE_CHANGE',
     'TYPE_MEMBER',
@@ -170,6 +171,7 @@ reserved = {
     'dontaudit' : 'DONTAUDIT',
     'auditallow' : 'AUDITALLOW',
     'neverallow' : 'NEVERALLOW',
+    'permissive' : 'PERMISSIVE',
     'type_transition' : 'TYPE_TRANSITION',
     'type_change' : 'TYPE_CHANGE',
     'type_member' : 'TYPE_MEMBER',
@@ -243,7 +245,7 @@ def t_refpolicywarn(t):
     t.lexer.lineno += 1
 
 def t_IDENTIFIER(t):
-    r'[a-zA-Z_\$][a-zA-Z0-9_\-\.\$\*]*'
+    r'[a-zA-Z_\$\"][a-zA-Z0-9_\-\.\$\*\"~]*'
     # Handle any keywords
     t.type = reserved.get(t.value,'IDENTIFIER')
     return t
@@ -490,6 +492,7 @@ def p_policy_stmt(p):
                    | interface_call
                    | role_def
                    | role_allow
+                   | permissive
                    | type_def
                    | typealias_def
                    | attribute_def
@@ -747,6 +750,10 @@ def p_role_allow(p):
     r.tgt_roles = p[3]
     p[0] = r
 
+def p_permissive(p):
+    'permissive : PERMISSIVE names SEMI'
+    t.skip(1)
+
 def p_avrule_def(p):
     '''avrule_def : ALLOW names names COLON names names SEMI
                   | DONTAUDIT names names COLON names names SEMI
@@ -768,6 +775,7 @@ def p_avrule_def(p):
 
 def p_typerule_def(p):
     '''typerule_def : TYPE_TRANSITION names names COLON names IDENTIFIER SEMI
+                    | TYPE_TRANSITION names names COLON names IDENTIFIER IDENTIFIER SEMI
                     | TYPE_CHANGE names names COLON names IDENTIFIER SEMI
                     | TYPE_MEMBER names names COLON names IDENTIFIER SEMI
     '''
@@ -1044,7 +1052,7 @@ def parse_headers(root, output=None, expand=True, debug=False):
         # of misc_macros. We are just going to pretend that this is an interface
         # to make the expansion work correctly.
         can_exec = refpolicy.Interface("can_exec")
-        av = access.AccessVector(["$1","$2","file","execute_no_trans","read",
+        av = access.AccessVector(["$1","$2","file","execute_no_trans","open", "read",
                                   "getattr","lock","execute","ioctl"])
 
         can_exec.children.append(refpolicy.AVRule(av))
