@@ -1,3 +1,27 @@
+1.1.5 2011-12-21
+	* better analysis of why things broke
+
+1.1.4 2011-12-05
+	* Allow ~ as a file identifier
+
+1.1.3 2011-11-03
+	* Ignore permissive qualifier if found in an interface
+	* Return name field in avc data
+
+1.1.2 2011-09-15
+	* src: sepolgen: add attribute storing infrastructure
+	* Change perm-map and add open to try to get better results on
+	* look for booleans that might solve problems
+	* sepolgen: audit2allow is mistakakenly not allowing valid module names
+	* tree: default make target to all not install
+
+1.1.1 2011-08-26
+	* refparser: include open among valid permissions
+	* refparser: add support for filename_trans rules
+
+1.1.0 2011-07-27
+	* Release, minor version bump
+
 1.0.23 2010-03-24
 	* Fix unit tests from Dan Walsh.
 
