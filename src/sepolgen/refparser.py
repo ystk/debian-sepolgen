@@ -65,6 +65,7 @@ tokens = (
     'BAR',
     'EXPL',
     'EQUAL',
+    'FILENAME',
     'IDENTIFIER',
     'NUMBER',
     'PATH',
@@ -91,8 +92,10 @@ tokens = (
     'CLASS',
     #   types and attributes
     'TYPEATTRIBUTE',
+    'ROLEATTRIBUTE',
     'TYPE',
     'ATTRIBUTE',
+    'ATTRIBUTE_ROLE',
     'ALIAS',
     'TYPEALIAS',
     #   conditional policy
@@ -153,8 +156,10 @@ reserved = {
     'class' : 'CLASS',
     # types and attributes
     'typeattribute' : 'TYPEATTRIBUTE',
+    'roleattribute' : 'ROLEATTRIBUTE',
     'type' : 'TYPE',
     'attribute' : 'ATTRIBUTE',
+    'attribute_role' : 'ATTRIBUTE_ROLE',
     'alias' : 'ALIAS',
     'typealias' : 'TYPEALIAS',
     # conditional policy
@@ -245,9 +250,15 @@ def t_refpolicywarn(t):
     t.lexer.lineno += 1
 
 def t_IDENTIFIER(t):
-    r'[a-zA-Z_\$\"][a-zA-Z0-9_\-\.\$\*\"~]*'
+    r'[a-zA-Z_\$][a-zA-Z0-9_\-\+\.\$\*~]*'
     # Handle any keywords
     t.type = reserved.get(t.value,'IDENTIFIER')
+    return t
+
+def t_FILENAME(t):
+    r'\"[a-zA-Z0-9_\-\+\.\$\*~ :]+\"'
+    # Handle any keywords
+    t.type = reserved.get(t.value,'FILENAME')
     return t
 
 def t_comment(t):
@@ -446,6 +457,7 @@ def p_interface_call_param(p):
                             | nested_id_set
                             | TRUE
                             | FALSE
+                            | FILENAME
     '''
     # Intentionally let single identifiers pass through
     # List means set, non-list identifier
@@ -457,6 +469,7 @@ def p_interface_call_param(p):
 def p_interface_call_param_list(p):
     '''interface_call_param_list : interface_call_param
                                  | interface_call_param_list COMMA interface_call_param
+                                 | interface_call_param_list COMMA interface_call_param COMMA interface_call_param_list
     '''
     if len(p) == 2:
         p[0] = [p[1]]
@@ -489,6 +502,7 @@ def p_policy_stmt(p):
                    | avrule_def
                    | typerule_def
                    | typeattribute_def
+                   | roleattribute_def
                    | interface_call
                    | role_def
                    | role_allow
@@ -496,6 +510,7 @@ def p_policy_stmt(p):
                    | type_def
                    | typealias_def
                    | attribute_def
+                   | attribute_role_def
                    | range_transition_def
                    | role_transition_def
                    | bool
@@ -542,6 +557,7 @@ def p_require(p):
     '''require : TYPE comma_list SEMI
                | ROLE comma_list SEMI
                | ATTRIBUTE comma_list SEMI
+               | ATTRIBUTE_ROLE comma_list SEMI
                | CLASS comma_list SEMI
                | BOOL comma_list SEMI
     '''
@@ -727,6 +743,11 @@ def p_attribute_def(p):
     a = refpolicy.Attribute(p[2])
     p[0] = a
 
+def p_attribute_role_def(p):
+	'attribute_role_def : ATTRIBUTE_ROLE IDENTIFIER SEMI'
+	a = refpolicy.Attribute_Role(p[2])
+	p[0] = a
+
 def p_typealias_def(p):
     'typealias_def : TYPEALIAS IDENTIFIER ALIAS names SEMI'
     t = refpolicy.TypeAlias()
@@ -775,6 +796,7 @@ def p_avrule_def(p):
 
 def p_typerule_def(p):
     '''typerule_def : TYPE_TRANSITION names names COLON names IDENTIFIER SEMI
+                    | TYPE_TRANSITION names names COLON names IDENTIFIER FILENAME SEMI
                     | TYPE_TRANSITION names names COLON names IDENTIFIER IDENTIFIER SEMI
                     | TYPE_CHANGE names names COLON names IDENTIFIER SEMI
                     | TYPE_MEMBER names names COLON names IDENTIFIER SEMI
@@ -788,6 +810,7 @@ def p_typerule_def(p):
     t.tgt_types = p[3]
     t.obj_classes = p[5]
     t.dest_type = p[6]
+    t.file_name = p[7]
     p[0] = t
 
 def p_bool(p):
@@ -817,6 +840,13 @@ def p_typeattribute_def(p):
     t = refpolicy.TypeAttribute()
     t.type = p[2]
     t.attributes.update(p[3])
+    p[0] = t
+
+def p_roleattribute_def(p):
+    '''roleattribute_def : ROLEATTRIBUTE IDENTIFIER comma_list SEMI'''
+    t = refpolicy.RoleAttribute()
+    t.role = p[2]
+    t.roleattributes.update(p[3])
     p[0] = t
 
 def p_range_transition_def(p):

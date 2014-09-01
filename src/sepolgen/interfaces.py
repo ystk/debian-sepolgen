@@ -273,7 +273,7 @@ class InterfaceVector:
                 self.add_av(av)
 
         # Add typeattribute access
-        if attributes != None:
+        if attributes:
             for typeattribute in interface.typeattributes():
                 for attr in typeattribute.attributes:
                     if not attributes.attributes.has_key(attr):

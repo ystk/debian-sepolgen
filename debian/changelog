@@ -1,3 +1,42 @@
+sepolgen (1.2.1-1) unstable; urgency=low
+
+  * Team upload.
+  * New upstream release
+  * debian/control:
+    - Bump Standards-Version to 3.9.4 (no further changes)
+    - Use canonical URL for VCS-Git field
+  * Drop d/p/0001-sepolgen-Properly-set-the-user-local-before-calculat.patch:
+    Proper fix has been applied in policycoreutils 2.2
+
+ -- Laurent Bigonville <bigon@debian.org>  Fri, 01 Nov 2013 18:37:26 +0100
+
+sepolgen (1.1.9-2) unstable; urgency=low
+
+  * Team upload.
+  * d/p/0001-sepolgen-Properly-set-the-user-local-before-calculat.patch:
+    Properly set the locale when calculating the bootdate (Closes: #677829)
+
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 09 May 2013 22:07:17 +0200
+
+sepolgen (1.1.9-1) unstable; urgency=low
+
+  * Team upload.
+  * New upstream release
+  * debian/control: Add Homepage field
+
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 09 May 2013 20:30:18 +0200
+
+sepolgen (1.1.8-1) experimental; urgency=low
+
+  * Team upload.
+  * New upstream release
+    - Drop d/p/0001-fix-detection-of-policy-loads.patch, applied upstream
+  * debian/gbp.conf: Change default git-buildpackage build-directory and the
+    debian-branch to "debian" instead of "upstream"
+  * debian/watch: Fix watch file URL
+
+ -- Laurent Bigonville <bigon@debian.org>  Wed, 26 Sep 2012 18:24:21 +0200
+
 sepolgen (1.1.5-3) unstable; urgency=low
 
   * Team upload.
